@@ -20,15 +20,15 @@ const cover: React.CSSProperties = {width: '100%', height: '100%', objectFit: 'c
 const cover34: React.CSSProperties = {position: 'absolute', height: 1920, width: 1440, left: -180, top: 0};
 
 // Tiempos de cada escena en segundos, alineados con las frases de la locución.
-// La música tiene el golpe fuerte en la revelación (9,58 s).
+// La música tiene el golpe fuerte en la revelación (8,72 s).
 export const SCENES = {
-  gancho: {from: 0, dur: 2.66},
-  corte: {from: 2.66, dur: 6.92},
-  revelacion: {from: 9.58, dur: 4.2},
-  detalles: {from: 13.78, dur: 7.62},
-  cierre: {from: 21.4, dur: 7.2},
+  gancho: {from: 0, dur: 2.14},
+  corte: {from: 2.14, dur: 6.58},
+  revelacion: {from: 8.72, dur: 4.34},
+  detalles: {from: 13.06, dur: 7.7},
+  cierre: {from: 20.76, dur: 7.38},
 };
-export const TOTAL_SECONDS = 28.6;
+export const TOTAL_SECONDS = 28.14;
 const VO_DELAY = 0.2; // la locución entra 0,2 s después del inicio del vídeo
 
 const Voice: React.FC = () => {
@@ -69,7 +69,7 @@ const Gancho: React.FC = () => {
         <Video src={staticFile('media/corte1.mp4')} trimBefore={Math.round(5.5 * fps)} muted style={{...cover34, filter: 'brightness(0.55) saturate(1.3)'}} />
       </SlowZoom>
       <Vignette />
-      <PunchTitle lines={['¿Tu NKD merece', 'algo común?']} goldLine={0} top={620} size={140} delay={3} />
+      <PunchTitle lines={['Lo que merece', 'tu NKD']} goldLine={1} top={620} size={150} delay={3} />
     </AbsoluteFill>
   );
 };
@@ -151,7 +151,7 @@ const FOTOS = [
 
 const Detalles: React.FC = () => {
   const {fps} = useVideoConfig();
-  const each = Math.round(2.54 * fps);
+  const each = Math.round(2.57 * fps);
   return (
     <AbsoluteFill style={{backgroundColor: BLACK}}>
       {FOTOS.map((f, i) => (
@@ -268,7 +268,7 @@ export const Anuncio: React.FC = () => {
       <Audio
         src={staticFile('music/beat.wav')}
         name="Música"
-        volume={(f) => interpolate(f, [0, 9.58 * fps - 1, 9.58 * fps, 13.6 * fps, 14 * fps, 27.4 * fps, TOTAL_SECONDS * fps], [0.3, 0.3, 0.16, 0.16, 0.24, 0.24, 0], clamp)}
+        volume={(f) => interpolate(f, [0, 8.72 * fps - 1, 8.72 * fps, 12.86 * fps, 13.26 * fps, 26.94 * fps, TOTAL_SECONDS * fps], [0.3, 0.3, 0.16, 0.16, 0.24, 0.24, 0], clamp)}
       />
     </AbsoluteFill>
   );
