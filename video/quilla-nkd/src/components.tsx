@@ -120,8 +120,8 @@ export const Captions: React.FC<{captions: Caption[]; offsetMs: number}> = ({cap
               style={{
                 color: active || key ? GOLD : WHITE,
                 display: 'inline-block',
-                marginRight: 18,
-                scale: active ? 1.12 : 1,
+                margin: '0 14px',
+                scale: active ? 1.06 : 1,
                 WebkitTextStroke: '3px rgba(0,0,0,0.9)',
                 paintOrder: 'stroke fill',
                 textShadow: '0 6px 24px rgba(0,0,0,0.9)',

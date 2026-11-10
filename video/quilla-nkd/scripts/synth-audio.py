@@ -53,10 +53,10 @@ def pad(freqs, dur):
         out.append(sum(math.sin(2 * math.pi * f * t + math.sin(t * 0.7 + k)) for k, f in enumerate(freqs)) / len(freqs) * env)
     return out
 
-LEN = 27.5
+LEN = 29.5
 L = [0.0] * int(LEN * SR); R = [0.0] * int(LEN * SR)
 beat = 60 / 140
-DROP = 9.0  # el golpe fuerte coincide con la revelación del producto
+DROP = 9.58  # el golpe fuerte coincide con la revelación del producto
 
 # Intro (0–9 s): pad oscuro + hats suaves que crecen
 for buf in (L, R):
@@ -74,7 +74,7 @@ for k in range(8):
 # Drop (9–24 s): kick, snare, hats en semicorcheas y 808
 notes = [55, 55, 65.4, 49]  # La, La, Do, Sol
 bar = beat * 4; t = DROP; bar_i = 0
-while t < 26.0:
+while t < 28.0:
     f = notes[bar_i % len(notes)]
     for buf in (L, R):
         add(buf, t, kick(), 0.9); add(buf, t + beat * 2.5, kick(), 0.7)
@@ -87,7 +87,7 @@ while t < 26.0:
     t += bar; bar_i += 1
 
 # Final: fundido
-n = len(L); fade0 = int(25.6 * SR)
+n = len(L); fade0 = int(27.4 * SR)
 for i in range(fade0, n):
     g = max(0.0, 1 - (i - fade0) / (n - fade0)); L[i] *= g; R[i] *= g
 write('public/music/beat.wav', L, R)

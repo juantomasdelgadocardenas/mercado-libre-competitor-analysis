@@ -11,7 +11,7 @@ import {
   useVideoConfig,
 } from 'remotion';
 import {BLACK, BODY_FONT, GOLD, IRIDESCENT, TITLE_FONT, WHITE} from './brand';
-import {CAPTIONS} from './captions';
+import {captionsBetween} from './captions';
 import {Captions, Flash, PunchTitle, Tag, Vignette} from './components';
 
 const clamp = {extrapolateLeft: 'clamp', extrapolateRight: 'clamp'} as const;
@@ -19,22 +19,23 @@ const cover: React.CSSProperties = {width: '100%', height: '100%', objectFit: 'c
 // Los clips de corte son 3:4; se escalan a lo alto y se centran para llenar el 9:16.
 const cover34: React.CSSProperties = {position: 'absolute', height: 1920, width: 1440, left: -180, top: 0};
 
-// Tiempos de cada escena en segundos (la música tiene el golpe fuerte en el seg. 9).
+// Tiempos de cada escena en segundos, alineados con las frases de la locución.
+// La música tiene el golpe fuerte en la revelación (9,58 s).
 export const SCENES = {
-  gancho: {from: 0, dur: 2.4},
-  corte: {from: 2.4, dur: 6.6},
-  revelacion: {from: 9.0, dur: 4.2},
-  detalles: {from: 13.2, dur: 7.8},
-  cierre: {from: 21.0, dur: 5.8},
+  gancho: {from: 0, dur: 2.66},
+  corte: {from: 2.66, dur: 6.92},
+  revelacion: {from: 9.58, dur: 4.2},
+  detalles: {from: 13.78, dur: 7.62},
+  cierre: {from: 21.4, dur: 7.2},
 };
-export const TOTAL_SECONDS = 26.8;
-const VO_DELAY = 0.2; // la voz entra 0,2 s después de empezar cada escena
+export const TOTAL_SECONDS = 28.6;
+const VO_DELAY = 0.2; // la locución entra 0,2 s después del inicio del vídeo
 
-const Voice: React.FC<{file: string}> = ({file}) => {
+const Voice: React.FC = () => {
   const {fps} = useVideoConfig();
   return (
-    <Sequence from={Math.round(VO_DELAY * fps)} name="Voz">
-      <Audio src={staticFile(`voiceover/${file}.mp3`)} volume={1} />
+    <Sequence from={Math.round(VO_DELAY * fps)} name="Locución">
+      <Audio src={staticFile('voiceover/locucion.mp3')} volume={1} />
     </Sequence>
   );
 };
@@ -109,7 +110,7 @@ const Revelacion: React.FC = () => {
           }),
         }}
       >
-        <Video src={staticFile('media/producto.mp4')} playbackRate={0.9} muted style={{...cover, filter: 'contrast(1.08) saturate(1.25)'}} />
+        <Video src={staticFile('media/producto.mp4')} playbackRate={0.85} muted style={{...cover, filter: 'contrast(1.08) saturate(1.25)'}} />
       </AbsoluteFill>
       <AbsoluteFill style={{background: 'linear-gradient(180deg, rgba(0,0,0,0.85) 0%, rgba(0,0,0,0.5) 25%, rgba(0,0,0,0) 42%, rgba(0,0,0,0) 65%, rgba(0,0,0,0.7) 100%)'}} />
       <PunchTitle lines={['Nueva']} top={170} size={90} delay={4} />
@@ -150,7 +151,7 @@ const FOTOS = [
 
 const Detalles: React.FC = () => {
   const {fps} = useVideoConfig();
-  const each = Math.round(2.6 * fps);
+  const each = Math.round(2.54 * fps);
   return (
     <AbsoluteFill style={{backgroundColor: BLACK}}>
       {FOTOS.map((f, i) => (
@@ -237,28 +238,25 @@ export const Anuncio: React.FC = () => {
     <AbsoluteFill style={{backgroundColor: BLACK}}>
       <Sequence {...s('gancho')} name="1. Gancho">
         <Gancho />
-        <Voice file="01-gancho" />
       </Sequence>
       <Sequence {...s('corte')} name="2. Corte láser">
         <Corte />
-        <Voice file="02-corte" />
-        <Captions captions={CAPTIONS.corte} offsetMs={voMs} />
+        <Captions captions={captionsBetween(SCENES.corte.from, SCENES.revelacion.from)} offsetMs={voMs - SCENES.corte.from * 1000} />
       </Sequence>
       <Sequence {...s('revelacion')} name="3. Revelación">
         <Revelacion />
-        <Voice file="03-revelacion" />
-        <Audio src={staticFile('sfx/impact.wav')} volume={0.9} />
+        <Audio src={staticFile('sfx/impact.wav')} volume={0.4} />
       </Sequence>
       <Sequence {...s('detalles')} name="4. Detalles">
         <Detalles />
-        <Voice file="04-detalles" />
-        <Captions captions={CAPTIONS.detalles} offsetMs={voMs} />
+        <Captions captions={captionsBetween(SCENES.detalles.from, SCENES.cierre.from)} offsetMs={voMs - SCENES.detalles.from * 1000} />
       </Sequence>
       <Sequence {...s('cierre')} name="5. Cierre">
         <Cierre />
-        <Voice file="05-cierre" />
         <Audio src={staticFile('sfx/impact.wav')} volume={0.5} />
       </Sequence>
+
+      <Voice />
 
       {/* Audio de fondo */}
       <Sequence name="Láser (sfx)" durationInFrames={Math.round(4 * fps)}>
@@ -270,7 +268,7 @@ export const Anuncio: React.FC = () => {
       <Audio
         src={staticFile('music/beat.wav')}
         name="Música"
-        volume={(f) => interpolate(f, [0, 9 * fps - 1, 9 * fps, 25.6 * fps, 26.8 * fps], [0.35, 0.35, 0.3, 0.3, 0], clamp)}
+        volume={(f) => interpolate(f, [0, 9.58 * fps - 1, 9.58 * fps, 13.6 * fps, 14 * fps, 27.4 * fps, TOTAL_SECONDS * fps], [0.3, 0.3, 0.16, 0.16, 0.24, 0.24, 0], clamp)}
       />
     </AbsoluteFill>
   );

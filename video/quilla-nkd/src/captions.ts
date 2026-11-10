@@ -1,8 +1,4 @@
-import gancho from '../public/captions/01-gancho.json';
-import corte from '../public/captions/02-corte.json';
-import revelacion from '../public/captions/03-revelacion.json';
-import detalles from '../public/captions/04-detalles.json';
-import cierre from '../public/captions/05-cierre.json';
+import locucion from '../public/captions/locucion.json';
 
 export type Caption = {
   text: string;
@@ -12,11 +8,9 @@ export type Caption = {
   confidence: number | null;
 };
 
-// Tiempos por palabra obtenidos transcribiendo la voz en off con ElevenLabs.
-export const CAPTIONS = {
-  gancho: gancho as Caption[],
-  corte: corte as Caption[],
-  revelacion: revelacion as Caption[],
-  detalles: detalles as Caption[],
-  cierre: cierre as Caption[],
-};
+// Tiempos por palabra de la locución completa (transcrita con ElevenLabs).
+export const CAPTIONS = locucion as Caption[];
+
+// Palabras dentro de un tramo de la locución, en segundos.
+export const captionsBetween = (fromS: number, toS: number) =>
+  CAPTIONS.filter((c) => c.startMs >= fromS * 1000 - 50 && c.startMs < toS * 1000 - 50);
