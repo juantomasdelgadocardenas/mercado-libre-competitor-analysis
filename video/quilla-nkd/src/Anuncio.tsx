@@ -20,15 +20,15 @@ const cover: React.CSSProperties = {width: '100%', height: '100%', objectFit: 'c
 const cover34: React.CSSProperties = {position: 'absolute', height: 1920, width: 1440, left: -180, top: 0};
 
 // Tiempos de cada escena en segundos, alineados con las frases de la locución.
-// La música tiene el golpe fuerte en la revelación (8,72 s).
+// La música tiene el golpe fuerte en la revelación (9,24 s).
 export const SCENES = {
-  gancho: {from: 0, dur: 2.14},
-  corte: {from: 2.14, dur: 6.58},
-  revelacion: {from: 8.72, dur: 4.34},
-  detalles: {from: 13.06, dur: 7.7},
-  cierre: {from: 20.76, dur: 7.38},
+  gancho: {from: 0, dur: 2.78},
+  corte: {from: 2.78, dur: 6.46},
+  revelacion: {from: 9.24, dur: 4.32},
+  detalles: {from: 13.56, dur: 7.12},
+  cierre: {from: 20.68, dur: 7.28},
 };
-export const TOTAL_SECONDS = 28.14;
+export const TOTAL_SECONDS = 27.96;
 const VO_DELAY = 0.2; // la locución entra 0,2 s después del inicio del vídeo
 
 const Voice: React.FC = () => {
@@ -151,7 +151,7 @@ const FOTOS = [
 
 const Detalles: React.FC = () => {
   const {fps} = useVideoConfig();
-  const each = Math.round(2.57 * fps);
+  const each = Math.round(2.37 * fps);
   return (
     <AbsoluteFill style={{backgroundColor: BLACK}}>
       {FOTOS.map((f, i) => (
@@ -214,7 +214,7 @@ const Cierre: React.FC = () => {
         <div style={{width: interpolate(frame, [0.3 * fps, 0.9 * fps], [0, 520], clamp), height: 4, background: GOLD, margin: '46px 0'}} />
         <div style={{fontFamily: BODY_FONT, fontWeight: 800, fontSize: 50, color: WHITE, textAlign: 'center', lineHeight: 1.5}}>
           <div style={line(0)}>
-            ENVÍO <span style={{color: GOLD}}>GRATIS</span> DESDE $150.000
+            ENVÍO <span style={{color: GOLD}}>GRATIS</span> DESDE $200.000
           </div>
           <div style={line(1)}>PAGO CONTRA ENTREGA</div>
           <div style={{...line(2), marginTop: 30, fontSize: 56, color: GOLD}}>WhatsApp 323 907 7291</div>
@@ -268,7 +268,7 @@ export const Anuncio: React.FC = () => {
       <Audio
         src={staticFile('music/beat.wav')}
         name="Música"
-        volume={(f) => interpolate(f, [0, 8.72 * fps - 1, 8.72 * fps, 12.86 * fps, 13.26 * fps, 26.94 * fps, TOTAL_SECONDS * fps], [0.3, 0.3, 0.16, 0.16, 0.24, 0.24, 0], clamp)}
+        volume={(f) => interpolate(f, [0, 9.24 * fps - 1, 9.24 * fps, 13.36 * fps, 13.76 * fps, 26.76 * fps, TOTAL_SECONDS * fps], [0.3, 0.3, 0.16, 0.16, 0.24, 0.24, 0], clamp)}
       />
     </AbsoluteFill>
   );
